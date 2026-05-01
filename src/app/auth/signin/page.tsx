@@ -3,20 +3,17 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const { status } = useSession();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (status === "authenticated") {
       router.replace("/");
     }
   }, [router, status]);
-
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
 
   return (
     <main className="auth-page">
@@ -37,7 +34,7 @@ export default function SignInPage() {
         <button
           type="button"
           className="auth-signin-btn"
-          onClick={() => signIn("google", { callbackUrl })}
+          onClick={() => signIn("google", { callbackUrl: "/" })}
         >
           Entrar com Google
         </button>
