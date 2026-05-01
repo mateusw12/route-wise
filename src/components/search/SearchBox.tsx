@@ -3,6 +3,7 @@
 import { GeocodingService } from "@/libs/services/geocoding.service";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import Image from "next/image";
 import {
   MdAddCircleOutline,
   MdDeleteOutline,
@@ -148,9 +149,19 @@ export const SearchBox = forwardRef<SearchBoxHandle, SearchBoxProps>(function Se
   return (
     <div className={`search-panel ${isCollapsed ? "is-collapsed" : ""}`}>
       <div className="search-panel-head">
-        <div>
-          <h1 className="search-title">RouteWise</h1>
-          <p className="search-subtitle">Busque origem e destino para tracar a rota.</p>
+        <div className="search-brand">
+          <Image
+            src="/logo/logo.png"
+            alt="Logo RouteWise"
+            width={34}
+            height={34}
+            className="search-brand-logo"
+            priority
+          />
+          <div>
+            <h1 className="search-title">RouteWise</h1>
+            <p className="search-subtitle">Busque origem e destino para tracar a rota.</p>
+          </div>
         </div>
         <button
           type="button"

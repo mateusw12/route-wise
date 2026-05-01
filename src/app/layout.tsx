@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "RouteWise",
   description: "Navegacao web com mapa interativo, geocoding e rotas.",
+  icons: {
+    icon: "/logo/logo.png",
+    shortcut: "/logo/logo.png",
+    apple: "/logo/logo.png",
+  },
 };
 
 export default function RootLayout({

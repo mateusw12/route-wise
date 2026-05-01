@@ -73,6 +73,20 @@ body {
   letter-spacing: 0.01em;
 }
 
+.search-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.search-brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 9px;
+  box-shadow: 0 4px 9px rgb(15 23 42 / 14%);
+}
+
 .search-panel-head {
   display: flex;
   align-items: flex-start;
