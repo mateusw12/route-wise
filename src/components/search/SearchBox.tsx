@@ -3,6 +3,13 @@
 import { GeocodingService } from "@/libs/services/geocoding.service";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
 import { useEffect, useMemo, useState } from "react";
+import {
+  MdAddCircleOutline,
+  MdDeleteOutline,
+  MdOutlinePlace,
+  MdOutlineRoute,
+  MdOutlineTravelExplore,
+} from "react-icons/md";
 
 export type SearchTarget =
   | { type: "start" }
@@ -11,7 +18,6 @@ export type SearchTarget =
 
 type SearchBoxProps = {
   waypointCount: number;
-  recentSearches: GeocodingResultDto[];
   onSelect: (target: SearchTarget, location: GeocodingResultDto) => void;
   onAddWaypoint: () => void;
   onRemoveWaypoint: (index: number) => void;
@@ -35,7 +41,6 @@ function useDebouncedValue(value: string, delayMs: number) {
 
 export function SearchBox({
   waypointCount,
-  recentSearches,
   onSelect,
   onAddWaypoint,
   onRemoveWaypoint,
@@ -152,9 +157,10 @@ export function SearchBox({
             </label>
             <button
               type="button"
-              className="search-chip ghost"
+              className="search-chip chip-danger"
               onClick={() => onRemoveWaypoint(index)}
             >
+              <MdDeleteOutline className="btn-icon" aria-hidden="true" />
               Remover
             </button>
           </div>
@@ -172,7 +178,8 @@ export function SearchBox({
         </div>
       ))}
 
-      <button type="button" className="search-chip" onClick={onAddWaypoint}>
+      <button type="button" className="search-chip search-chip-add" onClick={onAddWaypoint}>
+        <MdAddCircleOutline className="btn-icon" aria-hidden="true" />
         + Adicionar parada
       </button>
 
@@ -189,39 +196,28 @@ export function SearchBox({
       />
 
       <button type="button" className="route-btn route-btn-search" onClick={onBuildRoute} disabled={isRouting}>
+        <MdOutlineTravelExplore className="btn-icon" aria-hidden="true" />
         {isRouting ? "Calculando..." : "Tracar rota"}
       </button>
 
       <div className="search-actions-row">
-        <button type="button" className="route-btn route-btn-secondary" onClick={onClearRoute}>
+        <button type="button" className="route-btn route-btn-secondary route-btn-danger" onClick={onClearRoute}>
+          <MdDeleteOutline className="btn-icon" aria-hidden="true" />
           Limpar rota
         </button>
         <button
           type="button"
-          className={`route-btn route-btn-secondary ${markerModeEnabled ? "is-active" : ""}`}
+          className={`route-btn route-btn-secondary route-btn-marker ${markerModeEnabled ? "is-active" : ""}`}
           onClick={onToggleMarkerMode}
         >
+          {markerModeEnabled ? (
+            <MdOutlinePlace className="btn-icon" aria-hidden="true" />
+          ) : (
+            <MdOutlineRoute className="btn-icon" aria-hidden="true" />
+          )}
           {markerModeEnabled ? "Desativar marcacao" : "Ativar marcacao"}
         </button>
       </div>
-
-      {recentSearches.length > 0 && (
-        <div className="history-box">
-          <p className="search-label">Historico recente</p>
-          <div className="history-list">
-            {recentSearches.map((item) => (
-              <button
-                key={`history-${item.placeId}`}
-                type="button"
-                className="search-chip history"
-                onClick={() => selectResult(item)}
-              >
-                {item.displayName}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {isLoading && <p className="search-hint">Buscando...</p>}
 

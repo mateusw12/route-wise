@@ -13,10 +13,9 @@ import { RouteLayer } from "@/components/map/RouteLayer";
 import { UserLocation } from "@/components/map/UserLocation";
 import { MapClickMarkerLayer } from "@/components/map/MapClickMarkerLayer";
 import { AuthButton } from "@/components/auth/AuthButton";
+import { MdAccessTimeFilled, MdOutlinePlace, MdOutlineRoute } from "react-icons/md";
 
 const MAX_WAYPOINTS = 4;
-const MAX_RECENT_SEARCHES = 8;
-const SEARCH_HISTORY_KEY = "routewise:search-history";
 
 const MapView = dynamic(
   () => import("@/components/map/MapView").then((module) => module.MapView),
@@ -48,37 +47,11 @@ export function MapDashboard() {
   const [start, setStart] = useState<GeocodingResultDto | null>(null);
   const [end, setEnd] = useState<GeocodingResultDto | null>(null);
   const [waypoints, setWaypoints] = useState<(GeocodingResultDto | null)[]>([]);
-  const [recentSearches, setRecentSearches] = useState<GeocodingResultDto[]>(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
-
-    try {
-      const raw = window.localStorage.getItem(SEARCH_HISTORY_KEY);
-      if (!raw) {
-        return [];
-      }
-
-      const parsed = JSON.parse(raw) as GeocodingResultDto[];
-      return parsed.slice(0, MAX_RECENT_SEARCHES);
-    } catch {
-      return [];
-    }
-  });
   const [route, setRoute] = useState<RouteResponseDto | null>(null);
   const [isRouting, setIsRouting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [markers, setMarkers] = useState<MarkerPoint[]>([]);
   const [isMarkerModeEnabled, setIsMarkerModeEnabled] = useState(false);
-
-  function saveRecentSearch(location: GeocodingResultDto) {
-    setRecentSearches((current) => {
-      const deduplicated = current.filter((item) => item.placeId !== location.placeId);
-      const next = [location, ...deduplicated].slice(0, MAX_RECENT_SEARCHES);
-      window.localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(next));
-      return next;
-    });
-  }
 
   const center = useMemo<[number, number]>(() => {
     if (position) {
@@ -121,7 +94,6 @@ export function MapDashboard() {
   function handleSelect(target: SearchTarget, location: GeocodingResultDto) {
     setError(null);
     setRoute(null);
-    saveRecentSearch(location);
 
     if (target.type === "start") {
       setStart(location);
@@ -183,7 +155,6 @@ export function MapDashboard() {
 
         <SearchBox
           waypointCount={waypoints.length}
-          recentSearches={recentSearches}
           onSelect={handleSelect}
           onAddWaypoint={addWaypoint}
           onRemoveWaypoint={removeWaypoint}
@@ -199,13 +170,16 @@ export function MapDashboard() {
 
         {route && (
           <div className="route-summary">
-            <p>
+            <p className="route-summary-item">
+              <MdOutlineRoute className="btn-icon" aria-hidden="true" />
               Distancia: <strong>{formatDistanceMeters(route.summary.distance)}</strong>
             </p>
-            <p>
+            <p className="route-summary-item">
+              <MdAccessTimeFilled className="btn-icon" aria-hidden="true" />
               Tempo estimado: <strong>{formatDurationSeconds(route.summary.duration)}</strong>
             </p>
-            <p>
+            <p className="route-summary-item">
+              <MdOutlinePlace className="btn-icon" aria-hidden="true" />
               Paradas: <strong>{waypoints.filter((item) => Boolean(item)).length}</strong>
             </p>
           </div>

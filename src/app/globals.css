@@ -54,24 +54,29 @@ body {
   z-index: 900;
   top: 4.8rem;
   left: 1rem;
-  width: min(360px, calc(100% - 2rem));
-  background: color-mix(in oklab, var(--card) 94%, white);
-  border: 1px solid rgb(15 23 42 / 9%);
-  backdrop-filter: blur(6px);
-  border-radius: 16px;
-  padding: 0.82rem;
-  box-shadow: 0 12px 24px rgb(12 22 31 / 10%);
+  width: min(370px, calc(100% - 2rem));
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 80%), rgb(255 255 255 / 62%)),
+    color-mix(in oklab, var(--card) 93%, white);
+  border: 1px solid rgb(15 23 42 / 12%);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 0.95rem;
+  box-shadow:
+    0 16px 32px rgb(12 22 31 / 11%),
+    inset 0 1px 0 rgb(255 255 255 / 65%);
 }
 
 .search-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .search-subtitle {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--ink-soft);
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.65rem;
 }
 
 .search-label {
@@ -85,10 +90,10 @@ body {
 
 .search-input {
   width: 100%;
-  border: 1px solid rgb(17 24 39 / 12%);
+  border: 1px solid rgb(17 24 39 / 15%);
   border-radius: 10px;
   padding: 0.52rem 0.65rem;
-  background: #fff;
+  background: rgb(255 255 255 / 88%);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -137,48 +142,52 @@ body {
 }
 
 .search-chip {
-  border: 1px solid rgb(15 23 42 / 15%);
-  background: #fff;
-  color: #123042;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  border: 1px solid rgb(15 23 42 / 18%);
+  background: rgb(255 255 255 / 86%);
+  color: #0f2b3b;
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1;
-  padding: 0.4rem 0.62rem;
+  padding: 0.44rem 0.68rem;
   margin-top: 0.35rem;
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
 
-.search-chip.history {
-  margin: 0;
-  text-align: left;
+.search-chip:hover {
+  border-color: rgb(15 118 110 / 45%);
+  background: #ecfdf5;
 }
 
-.search-chip.ghost {
-  background: #fff7ed;
-  border-color: rgb(245 158 11 / 35%);
-  color: #92400e;
+.search-chip.search-chip-add {
+  width: 100%;
+}
+
+.search-chip.chip-danger {
+  background: #fff1f2;
+  border-color: rgb(225 29 72 / 28%);
+  color: #9f1239;
   margin-top: 0;
-}
-
-.history-box {
-  margin-top: 0.6rem;
-}
-
-.history-list {
-  margin-top: 0.3rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
 }
 
 .route-btn,
 .auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   border: 0;
   background: var(--accent);
   color: #fff;
   border-radius: 999px;
-  padding: 0.55rem 0.95rem;
+  min-height: 2.45rem;
+  padding: 0.58rem 0.98rem;
   font-weight: 650;
+  line-height: 1;
   transition: transform 140ms ease, opacity 140ms ease;
 }
 
@@ -187,32 +196,55 @@ body {
 }
 
 .route-btn-search {
-  margin-top: 0.62rem;
+  margin-top: 0.7rem;
   width: 100%;
-  display: block;
+  display: inline-flex;
+  background: linear-gradient(135deg, #0f766e, #0c5f59);
 }
 
 .search-actions-row {
-  margin-top: 0.42rem;
+  margin-top: 0.5rem;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.34rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.42rem;
 }
 
 .route-btn-secondary {
   width: 100%;
-  padding: 0.46rem 0.75rem;
+  min-height: 2.35rem;
+  padding: 0.52rem 0.8rem;
   font-size: 0.78rem;
-  background: #0f172a;
+  background: #1f2937;
 }
 
-.route-btn-secondary.is-active {
+.route-btn-secondary.route-btn-danger {
+  background: #7f1d1d;
+}
+
+.route-btn-secondary.route-btn-marker {
+  background: #1d4ed8;
+}
+
+.route-btn-secondary.route-btn-marker.is-active {
   background: #0369a1;
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.route-btn-search .btn-icon {
+  font-size: 1.2rem;
 }
 
 .route-btn:hover,
 .auth-btn:hover {
   transform: translateY(-1px);
+  filter: brightness(1.04);
 }
 
 .auth-wrap {
@@ -242,6 +274,12 @@ body {
 
 .route-summary {
   top: 7.2rem;
+}
+
+.route-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
 }
 
 .toast-warning {
@@ -276,6 +314,10 @@ body {
     left: 0.7rem;
     right: 0.7rem;
     width: auto;
+  }
+
+  .search-actions-row {
+    grid-template-columns: 1fr;
   }
 
   .route-summary,
