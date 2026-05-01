@@ -6,14 +6,20 @@ import type { MarkerPoint } from "@/types/map";
 type MapClickMarkerLayerProps = {
   markers: MarkerPoint[];
   onAddMarker: (coords: [number, number]) => void;
+  enabled: boolean;
 };
 
 export function MapClickMarkerLayer({
   markers,
   onAddMarker,
+  enabled,
 }: MapClickMarkerLayerProps) {
   useMapEvents({
     click(event) {
+      if (!enabled) {
+        return;
+      }
+
       onAddMarker([event.latlng.lat, event.latlng.lng]);
     },
   });

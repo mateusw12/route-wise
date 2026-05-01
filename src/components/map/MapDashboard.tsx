@@ -69,6 +69,7 @@ export function MapDashboard() {
   const [isRouting, setIsRouting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [markers, setMarkers] = useState<MarkerPoint[]>([]);
+  const [isMarkerModeEnabled, setIsMarkerModeEnabled] = useState(false);
 
   function saveRecentSearch(location: GeocodingResultDto) {
     setRecentSearches((current) => {
@@ -164,6 +165,15 @@ export function MapDashboard() {
     setWaypoints((current) => current.filter((_, currentIndex) => currentIndex !== index));
   }
 
+  function clearRoute() {
+    setRoute(null);
+    setError(null);
+  }
+
+  function toggleMarkerMode() {
+    setIsMarkerModeEnabled((current) => !current);
+  }
+
   return (
     <main className="page-shell">
       <section className="map-stage">
@@ -178,6 +188,9 @@ export function MapDashboard() {
           onAddWaypoint={addWaypoint}
           onRemoveWaypoint={removeWaypoint}
           onBuildRoute={buildRoute}
+          onClearRoute={clearRoute}
+          onToggleMarkerMode={toggleMarkerMode}
+          markerModeEnabled={isMarkerModeEnabled}
           isRouting={isRouting}
         />
 
@@ -223,7 +236,11 @@ export function MapDashboard() {
           )}
 
           {route && <RouteLayer route={route} />}
-          <MapClickMarkerLayer markers={markers} onAddMarker={handleAddMarker} />
+          <MapClickMarkerLayer
+            markers={markers}
+            onAddMarker={handleAddMarker}
+            enabled={isMarkerModeEnabled}
+          />
         </MapView>
       </section>
     </main>

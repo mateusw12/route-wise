@@ -16,6 +16,9 @@ type SearchBoxProps = {
   onAddWaypoint: () => void;
   onRemoveWaypoint: (index: number) => void;
   onBuildRoute: () => void;
+  onClearRoute: () => void;
+  onToggleMarkerMode: () => void;
+  markerModeEnabled: boolean;
   isRouting: boolean;
 };
 
@@ -37,6 +40,9 @@ export function SearchBox({
   onAddWaypoint,
   onRemoveWaypoint,
   onBuildRoute,
+  onClearRoute,
+  onToggleMarkerMode,
+  markerModeEnabled,
   isRouting,
 }: SearchBoxProps) {
   const [startQuery, setStartQuery] = useState("");
@@ -185,6 +191,19 @@ export function SearchBox({
       <button type="button" className="route-btn route-btn-search" onClick={onBuildRoute} disabled={isRouting}>
         {isRouting ? "Calculando..." : "Tracar rota"}
       </button>
+
+      <div className="search-actions-row">
+        <button type="button" className="route-btn route-btn-secondary" onClick={onClearRoute}>
+          Limpar rota
+        </button>
+        <button
+          type="button"
+          className={`route-btn route-btn-secondary ${markerModeEnabled ? "is-active" : ""}`}
+          onClick={onToggleMarkerMode}
+        >
+          {markerModeEnabled ? "Desativar marcacao" : "Ativar marcacao"}
+        </button>
+      </div>
 
       {recentSearches.length > 0 && (
         <div className="history-box">

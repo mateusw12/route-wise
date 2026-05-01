@@ -192,6 +192,24 @@ body {
   display: block;
 }
 
+.search-actions-row {
+  margin-top: 0.42rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.34rem;
+}
+
+.route-btn-secondary {
+  width: 100%;
+  padding: 0.46rem 0.75rem;
+  font-size: 0.78rem;
+  background: #0f172a;
+}
+
+.route-btn-secondary.is-active {
+  background: #0369a1;
+}
+
 .route-btn:hover,
 .auth-btn:hover {
   transform: translateY(-1px);
