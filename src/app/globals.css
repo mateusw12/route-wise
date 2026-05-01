@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f0e8;
+  --foreground: #1b1f24;
+  --card: #fffcf5;
+  --ink-soft: #5e6770;
+  --accent: #0f766e;
+  --accent-ink: #093c39;
+  --danger: #b42318;
+  --warning: #ca8a04;
 }
 
 @theme inline {
@@ -12,15 +18,198 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(circle at 20% 10%, #fff4d6 0%, transparent 40%),
+    radial-gradient(circle at 80% 90%, #cdeeea 0%, transparent 35%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.page-shell {
+  min-height: 100vh;
+  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.map-stage {
+  position: relative;
+  min-height: 70vh;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px rgb(20 31 43 / 14%);
+}
+
+.search-panel {
+  position: absolute;
+  z-index: 900;
+  top: 1rem;
+  left: 1rem;
+  width: min(420px, calc(100% - 2rem));
+  background: color-mix(in oklab, var(--card) 92%, white);
+  border: 1px solid rgb(15 23 42 / 10%);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 18px 32px rgb(12 22 31 / 12%);
+}
+
+.search-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.search-subtitle {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.7rem;
+}
+
+.search-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0.4rem 0 0.2rem;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+}
+
+.search-input {
+  width: 100%;
+  border: 1px solid rgb(17 24 39 / 12%);
+  border-radius: 11px;
+  padding: 0.62rem 0.75rem;
+  background: #fff;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(15 118 110 / 15%);
+}
+
+.search-results {
+  margin-top: 0.6rem;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid rgb(30 41 59 / 12%);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.search-result-item {
+  width: 100%;
+  text-align: left;
+  display: block;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.86rem;
+  border-bottom: 1px solid rgb(15 23 42 / 7%);
+}
+
+.search-result-item:hover {
+  background: #ecfdf5;
+}
+
+.search-hint {
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.route-btn,
+.auth-btn {
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+  font-weight: 650;
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.route-btn:disabled {
+  opacity: 0.7;
+}
+
+.route-btn:hover,
+.auth-btn:hover {
+  transform: translateY(-1px);
+}
+
+.auth-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.auth-user {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0b1f2a;
+}
+
+.route-summary,
+.toast-warning,
+.toast-error {
+  position: absolute;
+  z-index: 900;
+  right: 1rem;
+  background: color-mix(in oklab, var(--card) 93%, white);
+  border: 1px solid rgb(15 23 42 / 12%);
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  box-shadow: 0 12px 26px rgb(15 23 42 / 13%);
+}
+
+.route-summary {
+  top: 1rem;
+}
+
+.toast-warning {
+  top: 7.1rem;
+  border-color: rgb(202 138 4 / 30%);
+  color: var(--warning);
+}
+
+.toast-error {
+  top: 11rem;
+  border-color: rgb(180 35 24 / 35%);
+  color: var(--danger);
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: 0.7rem;
+  }
+
+  .top-bar {
+    flex-wrap: wrap;
+  }
+
+  .search-panel {
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    width: auto;
+  }
+
+  .route-summary,
+  .toast-warning,
+  .toast-error {
+    right: 0.7rem;
+    left: 0.7rem;
+    top: auto;
+    bottom: 0.7rem;
+  }
 }
