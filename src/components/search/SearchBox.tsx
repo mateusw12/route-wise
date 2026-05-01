@@ -180,7 +180,6 @@ export const SearchBox = forwardRef<SearchBoxHandle, SearchBoxProps>(function Se
 
       {!isCollapsed && (
         <div className="search-panel-body">
-
           <label className="search-label" htmlFor="start-input">
             Origem
           </label>

@@ -8,20 +8,17 @@ type GeoState = {
   error: string | null;
 };
 
-const GEOLOCATION_UNSUPPORTED_ERROR =
-  "Geolocalizacao nao suportada neste navegador.";
-
 export function useGeolocation() {
-  const supportsGeolocation =
-    typeof navigator !== "undefined" && "geolocation" in navigator;
-
   const [state, setState] = useState<GeoState>({
     position: null,
-    loading: supportsGeolocation,
-    error: supportsGeolocation ? null : GEOLOCATION_UNSUPPORTED_ERROR,
+    loading: true,
+    error: null,
   });
 
   useEffect(() => {
+    const supportsGeolocation =
+      typeof navigator !== "undefined" && "geolocation" in navigator;
+
     if (!supportsGeolocation) {
       return;
     }
@@ -47,7 +44,7 @@ export function useGeolocation() {
         maximumAge: 0,
       },
     );
-  }, [supportsGeolocation]);
+  }, []);
 
   return state;
 }

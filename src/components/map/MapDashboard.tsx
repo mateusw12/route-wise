@@ -2,16 +2,12 @@
 
 import { useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { Marker, Popup } from "react-leaflet";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
 import type { RouteResponseDto } from "@/libs/dtos/routing.dto";
 import { RoutingService } from "@/libs/services/routing.service";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import type { MarkerPoint } from "@/types/map";
 import { SearchBox, type SearchBoxHandle, type SearchTarget } from "@/components/search/SearchBox";
-import { RouteLayer } from "@/components/map/RouteLayer";
-import { UserLocation } from "@/components/map/UserLocation";
-import { MapClickMarkerLayer } from "@/components/map/MapClickMarkerLayer";
 import { AuthButton } from "@/components/auth/AuthButton";
 import { MdAccessTimeFilled, MdOutlinePlace, MdOutlineRoute } from "react-icons/md";
 
@@ -19,6 +15,29 @@ const MAX_WAYPOINTS = 4;
 
 const MapView = dynamic(
   () => import("@/components/map/MapView").then((module) => module.MapView),
+  { ssr: false },
+);
+
+const Marker = dynamic(() => import("react-leaflet").then((module) => module.Marker), {
+  ssr: false,
+});
+
+const Popup = dynamic(() => import("react-leaflet").then((module) => module.Popup), {
+  ssr: false,
+});
+
+const RouteLayer = dynamic(
+  () => import("@/components/map/RouteLayer").then((module) => module.RouteLayer),
+  { ssr: false },
+);
+
+const UserLocation = dynamic(
+  () => import("@/components/map/UserLocation").then((module) => module.UserLocation),
+  { ssr: false },
+);
+
+const MapClickMarkerLayer = dynamic(
+  () => import("@/components/map/MapClickMarkerLayer").then((module) => module.MapClickMarkerLayer),
   { ssr: false },
 );
 
