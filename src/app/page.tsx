@@ -1,12 +1,14 @@
-"use client";
+import { MapDashboard } from "@/components/map/MapDashboard";
+import { authOptions } from "@/libs/auth/auth-options";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-import dynamic from "next/dynamic";
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
-const MapDashboard = dynamic(
-  () => import("@/components/map/MapDashboard").then((module) => module.MapDashboard),
-  { ssr: false },
-);
+  if (!session) {
+    redirect("/auth/signin");
+  }
 
-export default function Home() {
   return <MapDashboard />;
 }

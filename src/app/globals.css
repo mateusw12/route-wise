@@ -27,6 +27,57 @@ body {
   font-family: var(--font-sans), "Segoe UI", sans-serif;
 }
 
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: min(440px, 100%);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 82%), rgb(255 255 255 / 68%)),
+    color-mix(in oklab, var(--card) 92%, white);
+  border: 1px solid rgb(15 23 42 / 13%);
+  border-radius: 20px;
+  padding: 1.2rem;
+  box-shadow: 0 16px 35px rgb(12 22 31 / 12%);
+  text-align: center;
+}
+
+.auth-logo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 0.75rem;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgb(15 23 42 / 18%);
+}
+
+.auth-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.auth-subtitle {
+  margin-top: 0.45rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.auth-signin-btn {
+  margin-top: 1rem;
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  min-height: 2.8rem;
+  background: linear-gradient(135deg, #0f766e, #0c5f59);
+  color: #fff;
+  font-weight: 700;
+}
+
 .page-shell {
   min-height: 100vh;
   padding: 1rem;
