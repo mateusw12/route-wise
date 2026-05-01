@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Marker, Popup } from "react-leaflet";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
@@ -8,7 +8,7 @@ import type { RouteResponseDto } from "@/libs/dtos/routing.dto";
 import { RoutingService } from "@/libs/services/routing.service";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import type { MarkerPoint } from "@/types/map";
-import { SearchBox, type SearchTarget } from "@/components/search/SearchBox";
+import { SearchBox, type SearchBoxHandle, type SearchTarget } from "@/components/search/SearchBox";
 import { RouteLayer } from "@/components/map/RouteLayer";
 import { UserLocation } from "@/components/map/UserLocation";
 import { MapClickMarkerLayer } from "@/components/map/MapClickMarkerLayer";
@@ -43,6 +43,7 @@ function formatDurationSeconds(duration: number) {
 }
 
 export function MapDashboard() {
+  const searchBoxRef = useRef<SearchBoxHandle>(null);
   const { position, error: geoError } = useGeolocation();
   const [start, setStart] = useState<GeocodingResultDto | null>(null);
   const [end, setEnd] = useState<GeocodingResultDto | null>(null);
@@ -119,6 +120,28 @@ export function MapDashboard() {
     };
 
     setMarkers((current) => [...current, point]);
+
+    let targetToFill: SearchTarget | null = null;
+    if (!start) {
+      targetToFill = { type: "start" };
+    } else if (!end) {
+      targetToFill = { type: "end" };
+    }
+
+    if (!targetToFill) {
+      return;
+    }
+
+    const [lat, lon] = coords;
+    const markerLocation: GeocodingResultDto = {
+      placeId: Date.now(),
+      displayName: `Ponto no mapa (${lat.toFixed(5)}, ${lon.toFixed(5)})`,
+      lat,
+      lon,
+    };
+
+    handleSelect(targetToFill, markerLocation);
+    searchBoxRef.current?.setFieldValue(targetToFill, markerLocation.displayName);
   }
 
   function addWaypoint() {
@@ -154,6 +177,7 @@ export function MapDashboard() {
         </div>
 
         <SearchBox
+          ref={searchBoxRef}
           waypointCount={waypoints.length}
           onSelect={handleSelect}
           onAddWaypoint={addWaypoint}

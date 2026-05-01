@@ -2,7 +2,7 @@
 
 import { GeocodingService } from "@/libs/services/geocoding.service";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
-import { useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import {
   MdAddCircleOutline,
   MdDeleteOutline,
@@ -30,6 +30,10 @@ type SearchBoxProps = {
   isRouting: boolean;
 };
 
+export type SearchBoxHandle = {
+  setFieldValue: (target: SearchTarget, value: string) => void;
+};
+
 function useDebouncedValue(value: string, delayMs: number) {
   const [debounced, setDebounced] = useState(value);
 
@@ -41,7 +45,7 @@ function useDebouncedValue(value: string, delayMs: number) {
   return debounced;
 }
 
-export function SearchBox({
+export const SearchBox = forwardRef<SearchBoxHandle, SearchBoxProps>(function SearchBox({
   waypointCount,
   onSelect,
   onAddWaypoint,
@@ -51,7 +55,7 @@ export function SearchBox({
   onToggleMarkerMode,
   markerModeEnabled,
   isRouting,
-}: SearchBoxProps) {
+}: SearchBoxProps, ref) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [startQuery, setStartQuery] = useState("");
   const [endQuery, setEndQuery] = useState("");
@@ -82,6 +86,12 @@ export function SearchBox({
       return next;
     });
   }
+
+  useImperativeHandle(ref, () => ({
+    setFieldValue(target, value) {
+      setQueryByTarget(target, value);
+    },
+  }));
 
   const currentQuery =
     activeField.type === "start"
@@ -267,4 +277,4 @@ export function SearchBox({
       )}
     </div>
   );
-}
+});
