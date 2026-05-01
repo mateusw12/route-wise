@@ -1,6 +1,14 @@
 # RouteWise
 
-Aplicacao web estilo GPS com Next.js 16, React 19, Leaflet, Nominatim, OpenRouteService e autenticacao Google com NextAuth.
+RouteWise e uma aplicacao web estilo GPS feita com Next.js 16, React 19, Leaflet, Nominatim, OpenRouteService e autenticacao Google com NextAuth.
+
+Feita para ser simples, leve e facil de usar: voce escolhe origem e destino, e o app mostra a melhor rota com distancia e tempo estimado.
+
+## Acesse o site
+
+Use o RouteWise em producao aqui:
+
+- https://route-wise-ivory.vercel.app/auth/signin
 
 ## Requisitos
 
@@ -8,13 +16,13 @@ Aplicacao web estilo GPS com Next.js 16, React 19, Leaflet, Nominatim, OpenRoute
 - Chave da OpenRouteService
 - Credenciais OAuth do Google
 
-## Ambiente
+## Configuracao do ambiente
 
 1. Copie o arquivo de exemplo:
 
 	cp .env.example .env.local
 
-2. Preencha as variaveis:
+2. Preencha as variaveis no arquivo `.env.local`:
 
 - ORS_API_KEY
 - NEXTAUTH_SECRET
@@ -22,12 +30,14 @@ Aplicacao web estilo GPS com Next.js 16, React 19, Leaflet, Nominatim, OpenRoute
 - GOOGLE_CLIENT_SECRET
 - NEXTAUTH_URL
 
-## Executar
+## Como executar localmente
 
+```bash
 npm install
 npm run dev
+```
 
-## Funcionalidades
+## O que voce encontra no app
 
 - Mapa interativo com Leaflet
 - Localizacao atual do usuario
@@ -35,13 +45,13 @@ npm run dev
 - Marcadores por clique no mapa
 - Tracado de rota com polyline
 - Exibicao de distancia e tempo estimado
-- Autenticacao com Google
+- Login com Google
 
-## Deploy Vercel com gate de CI
+## Deploy na Vercel com gate de CI
 
-O projeto inclui workflow em [.github/workflows/vercel-deploy.yml](.github/workflows/vercel-deploy.yml) que so faz deploy quando o workflow [CI](.github/workflows/ci.yml) concluir com sucesso na branch main.
+O projeto inclui workflow em [.github/workflows/vercel-deploy.yml](.github/workflows/vercel-deploy.yml) que so faz deploy quando o workflow [CI](.github/workflows/ci.yml) conclui com sucesso na branch `main`.
 
-Configure os secrets no GitHub:
+Configure os seguintes secrets no GitHub:
 
 - VERCEL_TOKEN
 - VERCEL_ORG_ID
@@ -50,7 +60,7 @@ Configure os secrets no GitHub:
 Para garantir que somente esse workflow publique na Vercel:
 
 1. Abra o projeto na Vercel.
-2. Entre em Settings > Git.
+2. Acesse Settings > Git.
 3. Desative auto-deploy de push/PR (se estiver ligado).
 
-Assim, o deploy de producao so acontece apos passar em lint, testes e build no GitHub Actions.
+Assim, o deploy de producao acontece apenas depois de passar por lint, testes e build no GitHub Actions.
