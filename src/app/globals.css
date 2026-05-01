@@ -30,56 +30,55 @@ body {
 .page-shell {
   min-height: 100vh;
   padding: 1rem;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 0.75rem;
-}
-
-.top-bar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
 }
 
 .map-stage {
   position: relative;
-  min-height: 70vh;
+  min-height: calc(100vh - 2rem);
+  width: 100%;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 45px rgb(20 31 43 / 14%);
 }
 
+.auth-floating {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 950;
+}
+
 .search-panel {
   position: absolute;
   z-index: 900;
-  top: 1rem;
+  top: 4.8rem;
   left: 1rem;
-  width: min(420px, calc(100% - 2rem));
-  background: color-mix(in oklab, var(--card) 92%, white);
-  border: 1px solid rgb(15 23 42 / 10%);
-  backdrop-filter: blur(8px);
-  border-radius: 18px;
-  padding: 1rem;
-  box-shadow: 0 18px 32px rgb(12 22 31 / 12%);
+  width: min(360px, calc(100% - 2rem));
+  background: color-mix(in oklab, var(--card) 94%, white);
+  border: 1px solid rgb(15 23 42 / 9%);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  padding: 0.82rem;
+  box-shadow: 0 12px 24px rgb(12 22 31 / 10%);
 }
 
 .search-title {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
 .search-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--ink-soft);
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.55rem;
 }
 
 .search-label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  margin: 0.4rem 0 0.2rem;
+  margin: 0.32rem 0 0.15rem;
   letter-spacing: 0.02em;
   color: var(--accent-ink);
 }
@@ -87,8 +86,8 @@ body {
 .search-input {
   width: 100%;
   border: 1px solid rgb(17 24 39 / 12%);
-  border-radius: 11px;
-  padding: 0.62rem 0.75rem;
+  border-radius: 10px;
+  padding: 0.52rem 0.65rem;
   background: #fff;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
@@ -100,8 +99,8 @@ body {
 }
 
 .search-results {
-  margin-top: 0.6rem;
-  max-height: 220px;
+  margin-top: 0.45rem;
+  max-height: 190px;
   overflow-y: auto;
   border: 1px solid rgb(30 41 59 / 12%);
   border-radius: 10px;
@@ -112,8 +111,8 @@ body {
   width: 100%;
   text-align: left;
   display: block;
-  padding: 0.6rem 0.7rem;
-  font-size: 0.86rem;
+  padding: 0.5rem 0.62rem;
+  font-size: 0.8rem;
   border-bottom: 1px solid rgb(15 23 42 / 7%);
 }
 
@@ -122,9 +121,54 @@ body {
 }
 
 .search-hint {
-  margin-top: 0.55rem;
-  font-size: 0.8rem;
+  margin-top: 0.45rem;
+  font-size: 0.75rem;
   color: var(--ink-soft);
+}
+
+.waypoint-row {
+  margin-top: 0.35rem;
+}
+
+.waypoint-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-chip {
+  border: 1px solid rgb(15 23 42 / 15%);
+  background: #fff;
+  color: #123042;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.4rem 0.62rem;
+  margin-top: 0.35rem;
+}
+
+.search-chip.history {
+  margin: 0;
+  text-align: left;
+}
+
+.search-chip.ghost {
+  background: #fff7ed;
+  border-color: rgb(245 158 11 / 35%);
+  color: #92400e;
+  margin-top: 0;
+}
+
+.history-box {
+  margin-top: 0.6rem;
+}
+
+.history-list {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .route-btn,
@@ -140,6 +184,12 @@ body {
 
 .route-btn:disabled {
   opacity: 0.7;
+}
+
+.route-btn-search {
+  margin-top: 0.62rem;
+  width: 100%;
+  display: block;
 }
 
 .route-btn:hover,
@@ -193,12 +243,18 @@ body {
     padding: 0.7rem;
   }
 
-  .top-bar {
-    flex-wrap: wrap;
+  .map-stage {
+    min-height: calc(100vh - 1.4rem);
+  }
+
+  .auth-floating {
+    top: 0.7rem;
+    right: 0.7rem;
   }
 
   .search-panel {
     position: absolute;
+    top: 4.4rem;
     left: 0.7rem;
     right: 0.7rem;
     width: auto;

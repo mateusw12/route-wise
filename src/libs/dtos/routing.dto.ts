@@ -1,6 +1,7 @@
 export type RouteInputDto = {
   start: [number, number];
   end: [number, number];
+  waypoints?: [number, number][];
   profile?: "driving-car";
 };
 

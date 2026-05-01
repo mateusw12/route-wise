@@ -4,8 +4,19 @@ import { GeocodingService } from "@/libs/services/geocoding.service";
 import type { GeocodingResultDto } from "@/libs/dtos/geocoding.dto";
 import { useEffect, useMemo, useState } from "react";
 
+export type SearchTarget =
+  | { type: "start" }
+  | { type: "end" }
+  | { type: "waypoint"; index: number };
+
 type SearchBoxProps = {
-  onSelect: (field: "start" | "end", location: GeocodingResultDto) => void;
+  waypointCount: number;
+  recentSearches: GeocodingResultDto[];
+  onSelect: (target: SearchTarget, location: GeocodingResultDto) => void;
+  onAddWaypoint: () => void;
+  onRemoveWaypoint: (index: number) => void;
+  onBuildRoute: () => void;
+  isRouting: boolean;
 };
 
 function useDebouncedValue(value: string, delayMs: number) {
@@ -19,17 +30,51 @@ function useDebouncedValue(value: string, delayMs: number) {
   return debounced;
 }
 
-export function SearchBox({ onSelect }: SearchBoxProps) {
+export function SearchBox({
+  waypointCount,
+  recentSearches,
+  onSelect,
+  onAddWaypoint,
+  onRemoveWaypoint,
+  onBuildRoute,
+  isRouting,
+}: SearchBoxProps) {
   const [startQuery, setStartQuery] = useState("");
   const [endQuery, setEndQuery] = useState("");
-  const [activeField, setActiveField] = useState<"start" | "end">("start");
+  const [waypointQueries, setWaypointQueries] = useState<Record<number, string>>({});
+  const [activeField, setActiveField] = useState<SearchTarget>({ type: "start" });
   const [results, setResults] = useState<GeocodingResultDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const currentQuery = useMemo(
-    () => (activeField === "start" ? startQuery : endQuery),
-    [activeField, startQuery, endQuery],
+  const waypointInputIndexes = useMemo(
+    () => Array.from({ length: waypointCount }, (_, index) => index),
+    [waypointCount],
   );
+
+  function setQueryByTarget(target: SearchTarget, value: string) {
+    if (target.type === "start") {
+      setStartQuery(value);
+      return;
+    }
+
+    if (target.type === "end") {
+      setEndQuery(value);
+      return;
+    }
+
+    setWaypointQueries((current) => {
+      const next = { ...current };
+      next[target.index] = value;
+      return next;
+    });
+  }
+
+  const currentQuery =
+    activeField.type === "start"
+      ? startQuery
+      : activeField.type === "end"
+        ? endQuery
+        : waypointQueries[activeField.index] ?? "";
 
   const debouncedQuery = useDebouncedValue(currentQuery, 450);
 
@@ -73,12 +118,7 @@ export function SearchBox({ onSelect }: SearchBoxProps) {
   function selectResult(item: GeocodingResultDto) {
     onSelect(activeField, item);
     setResults([]);
-
-    if (activeField === "start") {
-      setStartQuery(item.displayName);
-    } else {
-      setEndQuery(item.displayName);
-    }
+    setQueryByTarget(activeField, item.displayName);
   }
 
   return (
@@ -94,9 +134,41 @@ export function SearchBox({ onSelect }: SearchBoxProps) {
         className="search-input"
         placeholder="Ex: Rua XV de Novembro"
         value={startQuery}
-        onFocus={() => setActiveField("start")}
+        onFocus={() => setActiveField({ type: "start" })}
         onChange={(event) => setStartQuery(event.target.value)}
       />
+
+      {waypointInputIndexes.map((index) => (
+        <div key={`waypoint-${index}`} className="waypoint-row">
+          <div className="waypoint-head">
+            <label className="search-label" htmlFor={`waypoint-input-${index}`}>
+              Parada {index + 1}
+            </label>
+            <button
+              type="button"
+              className="search-chip ghost"
+              onClick={() => onRemoveWaypoint(index)}
+            >
+              Remover
+            </button>
+          </div>
+
+          <input
+            id={`waypoint-input-${index}`}
+            className="search-input"
+            placeholder="Ex: Posto de parada"
+            value={waypointQueries[index] ?? ""}
+            onFocus={() => setActiveField({ type: "waypoint", index })}
+            onChange={(event) =>
+              setQueryByTarget({ type: "waypoint", index }, event.target.value)
+            }
+          />
+        </div>
+      ))}
+
+      <button type="button" className="search-chip" onClick={onAddWaypoint}>
+        + Adicionar parada
+      </button>
 
       <label className="search-label" htmlFor="end-input">
         Destino
@@ -106,9 +178,31 @@ export function SearchBox({ onSelect }: SearchBoxProps) {
         className="search-input"
         placeholder="Ex: Aeroporto de Joinville"
         value={endQuery}
-        onFocus={() => setActiveField("end")}
+        onFocus={() => setActiveField({ type: "end" })}
         onChange={(event) => setEndQuery(event.target.value)}
       />
+
+      <button type="button" className="route-btn route-btn-search" onClick={onBuildRoute} disabled={isRouting}>
+        {isRouting ? "Calculando..." : "Tracar rota"}
+      </button>
+
+      {recentSearches.length > 0 && (
+        <div className="history-box">
+          <p className="search-label">Historico recente</p>
+          <div className="history-list">
+            {recentSearches.map((item) => (
+              <button
+                key={`history-${item.placeId}`}
+                type="button"
+                className="search-chip history"
+                onClick={() => selectResult(item)}
+              >
+                {item.displayName}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {isLoading && <p className="search-hint">Buscando...</p>}
 
