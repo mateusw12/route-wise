@@ -223,17 +223,17 @@ body {
 }
 
 .route-summary {
-  top: 1rem;
+  top: 7.2rem;
 }
 
 .toast-warning {
-  top: 7.1rem;
+  top: 12.8rem;
   border-color: rgb(202 138 4 / 30%);
   color: var(--warning);
 }
 
 .toast-error {
-  top: 11rem;
+  top: 17.1rem;
   border-color: rgb(180 35 24 / 35%);
   color: var(--danger);
 }
